@@ -1,6 +1,7 @@
 import { Product } from '@/types/product';
 import { products } from '@/mocks/mockProducts';
 import Image from 'next/image';
+import FlexibleImage from '@/app/components/FlexibleImage';
 
 type ProductCardProps = {
   productName: string;
@@ -19,30 +20,20 @@ export default function ProductCard({
     <>
       <section className="product-card">
         <div className="background-card">
-          <img src={image} alt="product" />
+          <FlexibleImage
+            className="product-image"
+            src={image}
+            alt={productName}
+            fill
+          />
         </div>
-        <div>
+        <div className="product-description">
           <h3>{productName}</h3>
-        </div>
-        <div>
-          <p>{price}</p>
+          <strong>
+            <p>{price}€</p>
+          </strong>
         </div>
       </section>
     </>
   );
-  // return (
-  //   <>
-  //     <section className="product-card">
-  //       <div className="background-card">
-  //         <img src="/dosificador-rosa-resina-.jpg" alt="product" />
-  //       </div>
-  //       <div>
-  //         <h3>titulo</h3>
-  //       </div>
-  //       <div>
-  //         <p>precio</p>
-  //       </div>
-  //     </section>
-  //   </>
-  // );
 }

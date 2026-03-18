@@ -1,7 +1,5 @@
 import Image from 'next/image';
 import ProductCard from './ProductCard';
-import SideBar from '../Sidebar';
-import { Product } from '@/types/product';
 import { products } from '@/mocks/mockProducts';
 export default function ProductGrid() {
   return (
@@ -17,20 +15,6 @@ export default function ProductGrid() {
             />
           </div>
         ))}
-
-        {/* <div className="grid-box">
-          <ProductCard></ProductCard>
-        </div>
-        <div className="grid-box">
-          <ProductCard></ProductCard>
-        </div>
-        <div className="grid-box">
-          <ProductCard></ProductCard>
-        </div> */}
-        {/* <div className="grid-box">5</div>
-        <div className="grid-box">6</div>
-        <div className="grid-box">7</div>
-        <div className="grid-box">8</div> */}
       </section>
     </>
   );
