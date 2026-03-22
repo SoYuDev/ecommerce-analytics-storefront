@@ -23,7 +23,10 @@ function FlexibleImage({
 
   // Skeleton animation until image is loaded
   const Skeleton = isLoading ? (
-    <div className="absolute inset-0 bg-gray-200 animate-pulse z-0" />
+    <div
+      data-testid="image-skeleton" // ID for Jest testing
+      className="absolute inset-0 bg-gray-200 animate-pulse z-0"
+    />
   ) : null;
 
   // If we use fill, width and height will not be necessary to be defined because the image
