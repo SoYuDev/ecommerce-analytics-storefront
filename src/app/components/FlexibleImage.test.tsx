@@ -5,6 +5,17 @@ import { render, screen } from '@testing-library/react';
 import { fireEvent } from '@testing-library/react';
 import FlexibleImage from './FlexibleImage';
 
+// Mock for the Image component in Next.js
+// When the component tries to use next/image change it for a img tag
+jest.mock('next/image', () => ({
+  __esModule: true,
+  default: (props: any) => {
+    // We need to extract the Next.js Image props to avoid errors in <img> tag
+    const { fill, priority, sizes, ...rest } = props;
+    return <img {...rest} />;
+  },
+}));
+
 describe('Componente FlexibleImage', () => {
   test('Should show the skelleton loading initially', () => {
     // * 1. ARRANGE - Bring the component that we want to test.
