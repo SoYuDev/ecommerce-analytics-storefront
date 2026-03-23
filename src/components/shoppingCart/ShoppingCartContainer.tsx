@@ -1,20 +1,18 @@
 'use client';
 import ShoppingCard from '@/components/shoppingCart/ShoppingCard';
-import { products } from '@/mocks/mockProducts';
 import CheckoutCart from './CheckoutCart';
+import { useCartStore } from '@/store/useCartStore';
 export default function ShoppingCartContainer() {
+  //we use the hook to obtain the products in the cart
+  const cart = useCartStore((state) => state.cart);
   return (
     <>
       <div className="ShoppingCartMainContainer">
         <section className="mainShopContainer">
-          {products.slice(3, 5).map((product) => (
+          {/* we map the products in the cart and render a ShoppingCard for each one */}
+          {cart.map((product) => (
             <div className="" key={product.id}>
-              <ShoppingCard
-                productName={product.name}
-                description={product.description}
-                price={product.price}
-                image={product.image}
-              />
+              <ShoppingCard product={product} />
             </div>
           ))}
         </section>

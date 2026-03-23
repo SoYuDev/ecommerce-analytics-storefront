@@ -1,52 +1,33 @@
-import { Product } from '@/types/product';
 import FlexibleImage from '@/app/components/FlexibleImage';
 import { useCartStore } from '@/store/useCartStore';
+import { Product } from '@/types/product';
 
-//  type ProductCardProps = {
-//    productName: string;
-//    description: string;
-//    price: number;
-//    image: string;
-//  };
-
-type ProductCardProps = Product;
-
-export default function ProductCard({
-  id,
-  name,
-  description,
-  price,
-  image,
-  ...rest
-}: ProductCardProps) {
+type ProductCardProps = {
+  product: Product;
+};
+// This component represents a single product card in the product grid.
+export default function ProductCard({ product }: ProductCardProps) {
+  // We use the cart store to get the addToCart function, which allows us to add products to the cart when the button is clicked.
   const addToCart = useCartStore((state) => state.addToCart);
-  const product: Product = {
-    id,
-    name,
-    description,
-    price,
-    image,
-    ...rest,
-  };
   return (
-    <>
-      <section className="productCard">
-        <div className="backgroundCard">
-          <FlexibleImage className="productImage" src={image} alt={name} fill />
-        </div>
-        <div className="product-description">
-          <h3>{name}</h3>
-          <strong>
-            <p>{price}€</p>
-          </strong>
-          <button
-            className="addToCartButton"
-            onClick={() => addToCart(product)}
-          >
-            Añadir al carrito
-          </button>
-        </div>
-      </section>
-    </>
+    <section className="productCard">
+      <div className="backgroundCard">
+        <FlexibleImage
+          className="productImage"
+          src={product.image}
+          alt={product.name}
+          fill
+        />
+      </div>
+      <div className="product-description">
+        <h3>{product.name}</h3>
+        <strong>
+          <p>{product.price}€</p>
+        </strong>
+        <button className="addToCartButton" onClick={() => addToCart(product)}>
+          Añadir al carrito
+        </button>
+      </div>
+    </section>
   );
 }

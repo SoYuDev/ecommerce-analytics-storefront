@@ -4,7 +4,11 @@ import ProductCard from './ProductCard';
 import { useListProducts } from '@/hooks/products/useProducts';
 
 export default function ProductGrid() {
+  //we use the hook to obtain the products
   const { data, isLoading, isError } = useListProducts();
+
+  if (isLoading) return <div>Cargando productos...</div>;
+  if (isError) return <div>Error al cargar productos</div>;
 
   return (
     <>
@@ -12,7 +16,7 @@ export default function ProductGrid() {
         {/* <div className="grid-box"> */}
         {data?.data.map((product) => (
           <div className="gridBox" key={product.id}>
-            <ProductCard {...product} />
+            <ProductCard product={product} />
           </div>
         ))}
       </section>
