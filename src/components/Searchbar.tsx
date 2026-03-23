@@ -27,11 +27,14 @@ export default function Searchbar() {
                 className="inputSearch"
                 type="text"
                 placeholder="Busca tu producto"
+                // Properties to improve web accessibility
+                aria-label='Busca tu producto'
+                title='Busca tu producto'
               />
             </div>
             <div className="cartUser">
               <Link href="/shopcart">
-                <img className="filterImage" src="/shopping-cart.png" alt="" />
+                <img className="filterImage" src="/shopping-cart.png" alt="Filter Image" />
               </Link>
 
               <button type="button" onClick={() => setIsLoginOpen(true)}>

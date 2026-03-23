@@ -37,7 +37,13 @@ export default function SideBar() {
           </div>
           <span>Precio</span>
           <div className="priceFilter">
-            <input type="range" min="0" max="100" />
+            <input
+              type="range"
+              min="0"
+              max="100"
+              aria-label="Price Filter"
+              title="Price Filter"
+            />
           </div>
           <div>
             <span>Orden Alfabetico</span>

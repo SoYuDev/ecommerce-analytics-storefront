@@ -2,7 +2,7 @@ import FlexibleImage from '@/app/components/FlexibleImage';
 
 export default function Header() {
   return (
-    <header className="header">
+    <header className="header" role='banner'>
       {/* --- BACKGROUND IMAGE --- */}
       <div className="absolute inset-0 z-0">
         <FlexibleImage
