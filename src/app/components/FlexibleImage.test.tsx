@@ -73,4 +73,26 @@ describe('Componente FlexibleImage', () => {
     expect(imagen).toHaveClass('opacity-100');
     expect(imagen).not.toHaveClass('opacity-0');
   });
+
+  test('Should render correctly with the fill property and handle load event', () => {
+    // * 1. ARRANGE
+    // Whenever we used fill property, defining height and width is no longer necessary
+    render(
+      <FlexibleImage src="/ruta-fill.jpg" alt="Imagen con fill" fill={true} />
+    );
+
+    const imagen = screen.getByAltText('Imagen con fill');
+
+    // Check if the skelleton exists initially
+    expect(screen.getByTestId('image-skeleton')).toBeInTheDocument();
+
+    // * 2. ACT - Trigger onLoad() event
+    fireEvent.load(imagen);
+
+    // * 3. ASSERT
+    expect(screen.queryByTestId('image-skeleton')).not.toBeInTheDocument();
+
+    // Verify that the image is visible
+    expect(imagen).toHaveClass('opacity-100');
+  });
 });
