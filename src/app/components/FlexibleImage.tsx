@@ -25,7 +25,7 @@ function FlexibleImage({
   const Skeleton = isLoading ? (
     <div
       data-testid="image-skeleton" // ID for Jest testing
-      className="absolute inset-0 bg-gray-200 animate-pulse z-0"
+      className="absolute inset-0 bg-[#3FB6A8] animate-pulse z-0"
     />
   ) : null;
 
