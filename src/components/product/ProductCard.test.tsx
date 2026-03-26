@@ -4,10 +4,16 @@ import '@testing-library/jest-dom';
 import ProductCard from './ProductCard';
 import { useCartStore } from '@/store/useCartStore';
 
-// 1. Mockeamos FlexibleImage (Usando el alias @/ que nunca falla)
+// 1. Mockeamos FlexibleImage extrayendo las props de Next.js
 jest.mock('@/app/components/FlexibleImage', () => {
-  return function DummyFlexibleImage(props: any) {
-    return <img data-testid="flexible-image" {...props} />;
+  // Extraemos fill y priority para que NO entren en ...rest
+  return function DummyFlexibleImage({
+    fill: _fill,
+    priority: _prio,
+    sizes: _s,
+    ...rest
+  }: any) {
+    return <img data-testid="flexible-image" {...rest} />;
   };
 });
 

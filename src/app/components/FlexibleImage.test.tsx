@@ -9,9 +9,8 @@ import FlexibleImage from './FlexibleImage';
 // When the component tries to use next/image change it for a img tag
 jest.mock('next/image', () => ({
   __esModule: true,
-  default: (props: any) => {
-    // We need to extract the Next.js Image props to avoid errors in <img> tag
-    const { fill, priority, sizes, ...rest } = props;
+  default: ({ fill, priority, sizes, ...rest }: any) => {
+    // Al desestructurar aquí, 'rest' queda limpio de esas props de Next.js
     return <img {...rest} />;
   },
 }));

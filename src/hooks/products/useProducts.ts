@@ -42,12 +42,12 @@ export const useFilteredProducts = () => {
   });
 
   const prefetchNextPage = useCallback(() => {
-    console.log('Evento hover detectado');
-    if (query.data?.hasNextPage) {
-      console.log('Haciendo prefetch de la página:', currentPage + 1);
-    } else {
-      console.log('No hay página siguiente ');
-    }
+    // console.log('Evento hover detectado');
+    // if (query.data?.hasNextPage) {
+    //   console.log('Haciendo prefetch de la página:', currentPage + 1);
+    // } else {
+    //   console.log('No hay página siguiente ');
+    // }
     if (query.data?.hasNextPage) {
       const nextPage = currentPage + 1;
       const prefetchCategories = selectedCategory ? [selectedCategory] : [];

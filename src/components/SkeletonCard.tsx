@@ -1,6 +1,9 @@
 export default function SkeletonCard() {
   return (
-    <div className="gridBox animate-pulse bg-[#3FB6A8] border-gray-200 rounded-xl overflow-hidden shadow-sm">
+    <div
+      data-testid="skeleton-card"
+      className="gridBox animate-pulse bg-[#3FB6A8] border-gray-200 rounded-xl overflow-hidden shadow-sm"
+    >
       {/* Espacio para la imagen */}
       <div className="w-full h-48 bg-[#e0e0cc] opacity-50" />
 

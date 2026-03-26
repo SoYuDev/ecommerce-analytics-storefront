@@ -102,14 +102,14 @@ export default function SideBar() {
           </div>
         </div>
 
-        <div className='resetFilters'>
-            
+        <div className="resetFilters">
           <button
-          type='button'
-          className='resetFiltersButton'
-          onClick={ resetFilters }  
+            type="button"
+            className="resetFiltersButton"
+            onClick={resetFilters}
           >
-          Borrar filtros </button>
+            Borrar filtros{' '}
+          </button>
         </div>
       </section>
     </dialog>

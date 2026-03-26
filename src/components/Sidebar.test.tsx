@@ -2,81 +2,83 @@ import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import SideBar from './Sidebar';
+import { useFilterStore } from '@/store/useFilterStore';
+
+jest.mock('@/store/useFilterStore', () => ({
+  useFilterStore: jest.fn(),
+}));
 
 describe('Componente SideBar', () => {
-  test('renderiza los títulos principales de los filtros', () => {
-    render(<SideBar />);
+  const mockSetSelectedCategory = jest.fn();
+  const mockSetPriceOrder = jest.fn();
+  const mockSetNameOrder = jest.fn();
+  const mockResetFilters = jest.fn();
 
-    // Verificamos que los textos principales estén en la pantalla
-    expect(screen.getByText('Filtros')).toBeInTheDocument();
-    expect(screen.getByText('Categoría')).toBeInTheDocument();
-    expect(screen.getByText('Precio')).toBeInTheDocument();
-    expect(screen.getByText('Orden Alfabético')).toBeInTheDocument();
+  // Setup por defecto para evitar repetir código en cada test
+  beforeEach(() => {
+    jest.clearAllMocks();
+    (useFilterStore as unknown as jest.Mock).mockImplementation((selector) =>
+      selector({
+        selectedCategory: '',
+        priceOrder: '',
+        nameOrder: '',
+        setSelectedCategory: mockSetSelectedCategory,
+        setPriceOrder: mockSetPriceOrder,
+        setNameOrder: mockSetNameOrder,
+        resetFilters: mockResetFilters,
+      })
+    );
   });
 
-  test('renderiza las opciones de categoría (checkboxes)', () => {
+  test('renderiza correctamente las secciones principales', () => {
     render(<SideBar />);
-
-    // Buscamos los checkboxes por la etiqueta de texto que los acompaña
-    const checkRopa = screen.getByLabelText('Ropa');
-    const checkTecnologia = screen.getByLabelText('Tecnología');
-    const checkHome = screen.getByLabelText('Home');
-    const checkAccesorios = screen.getByLabelText('Accesorios');
-
-    // Verificamos que existan y sean del tipo checkbox
-    expect(checkRopa).toBeInTheDocument();
-    expect(checkRopa).toHaveAttribute('type', 'checkbox');
-    expect(checkTecnologia).toBeInTheDocument();
-    expect(checkHome).toBeInTheDocument();
-    expect(checkAccesorios).toBeInTheDocument();
-
-    // Verificamos que por defecto no estén marcados
-    expect(checkRopa).not.toBeChecked();
+    expect(screen.getByText(/^Filtros$/i)).toBeInTheDocument();
+    expect(screen.getByText(/^Precio$/i)).toBeInTheDocument();
+    expect(screen.getByText(/^Orden Alfabético$/i)).toBeInTheDocument();
   });
 
-  test('renderiza el selector de precio con sus opciones', () => {
+  test('maneja la selección de categorías', () => {
     render(<SideBar />);
-
-    // Buscamos el select por las opciones que contiene (o usando getByRole)
-    const selectPrecio = screen.getByRole('combobox');
-    expect(selectPrecio).toBeInTheDocument();
-
-    // Verificamos que las opciones existan dentro del documento
-    expect(
-      screen.getByRole('option', { name: 'Precio mas alto' })
-    ).toBeInTheDocument();
-    expect(
-      screen.getByRole('option', { name: 'Precio mas bajo' })
-    ).toBeInTheDocument();
+    fireEvent.click(screen.getByLabelText(/Electronics/i));
+    expect(mockSetSelectedCategory).toHaveBeenCalledWith('electronics');
   });
 
-  test('renderiza los botones de orden alfabético', () => {
+  test('maneja la lógica de orden de precio (Cubre ramas IF/ELSE)', () => {
     render(<SideBar />);
+    const select = screen.getByLabelText(/Ordenar por precio/i);
 
-    // Buscamos los botones por su texto y su rol
-    const btnAZ = screen.getByRole('button', { name: 'A-Z' });
-    const btnZA = screen.getByRole('button', { name: 'Z-A' });
+    // Rama IF: Valor válido
+    fireEvent.change(select, { target: { value: 'min-max' } });
+    expect(mockSetPriceOrder).toHaveBeenCalledWith('min-max');
 
-    expect(btnAZ).toBeInTheDocument();
-    expect(btnZA).toBeInTheDocument();
+    // Rama ELSE: Seleccionar "Sin orden" (valor "")
+    fireEvent.change(select, { target: { value: '' } });
+    expect(mockSetPriceOrder).toHaveBeenCalledWith('max-min');
   });
 
-  test('permite interactuar con los checkboxes y el select', () => {
-    // Aunque tu componente aún no tenga lógica vinculada a estos inputs,
-    // podemos probar que el DOM nativo permite la interacción.
+  test('maneja el orden alfabético y sus estados visuales (Cubre ternarios)', () => {
+    // 1. Caso A-Z activo
+    (useFilterStore as unknown as jest.Mock).mockImplementation((selector) =>
+      selector({ nameOrder: 'a-z', setNameOrder: mockSetNameOrder })
+    );
+    const { rerender } = render(<SideBar />);
+    expect(screen.getByText('A-Z')).toHaveClass('active');
+
+    fireEvent.click(screen.getByText('A-Z'));
+    expect(mockSetNameOrder).toHaveBeenCalledWith('a-z');
+
+    // 2. Caso Z-A activo
+    (useFilterStore as unknown as jest.Mock).mockImplementation((selector) =>
+      selector({ nameOrder: 'z-a', setNameOrder: mockSetNameOrder })
+    );
+    rerender(<SideBar />);
+    expect(screen.getByText('Z-A')).toHaveClass('active');
+    expect(screen.getByText('A-Z')).not.toHaveClass('active');
+  });
+
+  test('ejecuta la limpieza de filtros', () => {
     render(<SideBar />);
-
-    const checkRopa = screen.getByLabelText('Ropa');
-    const selectPrecio = screen.getByRole('combobox');
-
-    // Simulamos que el usuario marca la casilla de "Ropa"
-    fireEvent.click(checkRopa);
-    expect(checkRopa).toBeChecked();
-
-    // Simulamos que el usuario cambia la opción del select
-    fireEvent.change(selectPrecio, { target: { value: 'Precio mas bajo' } });
-
-    // Aquí el value es '' porque en tu componente pusiste <option value="">.
-    // Lo ideal sería que en tu componente tuvieran values reales como value="asc" o value="desc"
+    fireEvent.click(screen.getByRole('button', { name: /Borrar filtros/i }));
+    expect(mockResetFilters).toHaveBeenCalled();
   });
 });
